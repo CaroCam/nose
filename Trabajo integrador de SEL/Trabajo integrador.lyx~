@@ -1,0 +1,1669 @@
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Marginal
+status open
+
+\begin_layout Plain Layout
+Carolina Camargo
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\shape italic
+\size large
+\color black
+1.
+ Ejercicio de equilibrio estático.
+\end_layout
+
+\begin_layout Standard
+\align left
+Para cierto sistema masa resorte se deben satisfacer las siguientes ecuaciones
+ de equilibrio estático.
+\end_layout
+
+\begin_layout Standard
+\align left
+\begin_inset Formula $(k_{1}+k_{2}+k_{3}+k_{5})·x_{1}−k_{3}·x_{2}−k_{5}·x_{3}=m_{1}·g$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align left
+\begin_inset Formula $−k_{3}·x_{1}+(k_{3}+k_{4})·x_{2}−k_{4}·x_{3}=m_{2}·g$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align left
+\begin_inset Formula $−k_{5}·x_{1}−k_{4}·x_{2}+(k_{4}+k_{5})·x_{3}=m_{3}·g$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align left
+siendo 
+\begin_inset Formula $k_{1}=k_{3}=k_{4}=k,\: k_{2}=k_{5}=5k,\: m_{1}=m_{3}=2m,\: m_{2}=m$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\align left
+
+\series bold
+\shape italic
+\color black
+Código de Octave
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+function
+\shape default
+\color inherit
+ [x]=desplazamientoElas(m,k) 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\emph on
+\color green
+%% La funcion me da como resultado los valores de los 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\emph on
+\color green
+%% desplazamientos elasticos.
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\emph on
+\color green
+%% - k es la constante del resorte.
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\emph on
+\color green
+%% - m es la masa del resorte.
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\emph on
+\color green
+%% Se resuelve el sistema mediante el metodo iterativo de Gauss-Seidel.
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\emph on
+\color green
+%%Entrada
+\emph default
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+k=input("Ingrese el valos de k:"); 
+\end_layout
+
+\begin_layout Standard
+\align left
+m=input("Ingrese el valor de m:"); 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\emph on
+\color green
+%%Proceso
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+if
+\shape default
+\color inherit
+ k,m>0 
+\end_layout
+
+\begin_layout Standard
+\align left
+A=[12*k,-k,-5*k;-k,2*k,-k;-5*k,-k,6*k]; 
+\end_layout
+
+\begin_layout Standard
+\align left
+b=[19.62*m;9.81*m;19.62*m]; 
+\end_layout
+
+\begin_layout Standard
+\align left
+x0=[0;0;0]; 
+\end_layout
+
+\begin_layout Standard
+\align left
+tol=1E-3; 
+\end_layout
+
+\begin_layout Standard
+\align left
+x=gs(A,b,x0,tol); (*) 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\emph on
+\color green
+%%Salida
+\emph default
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+disp("Los valores de los desplazamientos elasticos son:");
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+else
+\end_layout
+
+\begin_layout Standard
+\align left
+disp("Los valores de k y m no son mayores a cero") 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endif
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endfunction
+\end_layout
+
+\begin_layout Standard
+\align left
+(*)Programa ocupado para resolver el problema anterior.
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+function
+\shape default
+\color inherit
+ [x]=gs(A,b,x0,tol)
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% El siguiente programa resuelve el SEL
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% por el método iterativo de Gauss-Seidel
+\emph on
+\color inherit
+.
+\end_layout
+
+\begin_layout Standard
+\align left
+[n,n]=size(A); 
+\end_layout
+
+\begin_layout Standard
+\align left
+x=zeros(n,1); 
+\end_layout
+
+\begin_layout Standard
+\align left
+erro=999;
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% Obtengo la matriz diagonal de A
+\emph on
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+for
+\shape default
+\color inherit
+ i=1:n
+\end_layout
+
+\begin_layout Standard
+\align left
+D(i,i)=A(i,i);
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endfor
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% Obtengo la matriz triangular estrictamente inferior.
+\end_layout
+
+\begin_layout Standard
+\align left
+Tinf=tril(A,-1); 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% Obtengo la matriz triangular estrictamente superior.
+
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+Tsup=triu(A,1); 
+\end_layout
+
+\begin_layout Standard
+\align left
+An=(D+Tinf); 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+while
+\shape default
+\color inherit
+ erro>tol 
+\end_layout
+
+\begin_layout Standard
+\align left
+bn=b-Tsup*x0;
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% Aplicamos sustitucion progresiva.
+\end_layout
+
+\begin_layout Standard
+\align left
+x(1)=bn(1)/An(1,1); 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+for
+\shape default
+\color inherit
+ k=2:n 
+\end_layout
+
+\begin_layout Standard
+\align left
+x(k)=(bn(k)-An(k,1:k-1)*x(1:k-1))/An(k,k); 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endfor
+\end_layout
+
+\begin_layout Standard
+\align left
+erro=norm((x-x0),1); 
+\end_layout
+
+\begin_layout Standard
+\align left
+x0=x;
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endwhile
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endfunction
+\end_layout
+
+\begin_layout Itemize
+\align left
+
+\series bold
+\shape italic
+\color black
+Captura del programa en ejecución
+\end_layout
+
+\begin_layout Standard
+\align left
+\begin_inset Graphics
+	filename C:/Users/CARO/Pictures/cap1.jpg
+	noUnzip
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+El método que se utiliza para resolver el problema es el método iterativo
+ de Gauss-Seidel 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\shape italic
+\size large
+\color black
+2.
+ Ejercicio de equilibrio estático.
+\end_layout
+
+\begin_layout Standard
+\align left
+Los desplazamientos de un cierto reticulado plano se pueden determinar mediante
+ el conjunto de ecuaciones de equilibrio estático que se presentan a continuació
+n.
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+\begin_inset Formula $27,58E6u_{1}+7,004E6u_{2}−7,0044E6u_{3}=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align left
+\begin_inset Formula $7,004E6u_{1}+29,57E6u_{2}−5,253E6u_{3}−24,32E6u_{5}=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align left
+\begin_inset Formula $−7,004E6u_{1}−5,253E6u_{2}+29,57E6u_{3}=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align left
+\begin_inset Formula $27,58E6u_{4}−7,004E6u_{5}=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align left
+\begin_inset Formula $−24,31E6u_{2}−7,004E6u_{4}+29,57E6u_{5}=−47000[N]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align left
+donde los coeficientes numéricos que multiplican a los desplazamientos expresan
+ rigidez en (N/m).
+\end_layout
+
+\begin_layout Itemize
+\align left
+
+\series bold
+\shape italic
+\color black
+Código de Octave
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+function
+\shape default
+\color inherit
+ [u]=desplazamientoElas2()
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% La funcion me da como resultado los valores de los 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% desplazamientos elasticos.
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% Se resuelve el sistema mediante triangulacion superior seguida 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% de una sustitucion regresiva.
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Entrada
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+A=[27580,7004,-7004,0,0;7004,29570,-5253,0,-24320;-7004,-5253,29570,0,0;0,0,0,27
+580,-7004;0,-24310,0,-7004,29570]; 
+\end_layout
+
+\begin_layout Standard
+\align left
+B=[0;0;0;0;-47000]; 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Proceso
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Resolvemos Au=B mediante triangulacion superior seguida de sustitucion
+ regresiva.
+
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+u=tSSR(A,B); (*)
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Salida
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+disp("Los valores de los desplazamientos elasticos son:"); 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endfunction
+\end_layout
+
+\begin_layout Standard
+\align left
+(*) Programa utilizado para resolver el problema anterior.
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+function
+\shape default
+\color inherit
+ [X]=tSSR(A,B) 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Ingreso - A matriz N x N no singular 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% - B es una matriz N x 1 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%salida - X es matriz N x 1 con la solución de AX=B.
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Iniciaalizar X y la matriz temporario de almacenaje C
+\end_layout
+
+\begin_layout Standard
+\align left
+[N N]=size(A); 
+\end_layout
+
+\begin_layout Standard
+\align left
+X=zeros(N,1); 
+\end_layout
+
+\begin_layout Standard
+\align left
+C=zeros(1,N+1); 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Forma la matriz aumentada: Aug=[A|B] 
+\end_layout
+
+\begin_layout Standard
+\align left
+Aug=[A B]; 
+\end_layout
+
+\begin_layout Standard
+\align left
+for p=1:N-1 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Pivoteo parcial para columna p
+\end_layout
+
+\begin_layout Standard
+\align left
+[Y,j]=max(abs(Aug(p:N,p))); 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Intercambio fila p y j 
+\end_layout
+
+\begin_layout Standard
+\align left
+C=Aug(p,:);
+\end_layout
+
+\begin_layout Standard
+\align left
+Aug(p,:)=Aug(j+p-1,:);
+\end_layout
+
+\begin_layout Standard
+\align left
+Aug(j+p-1,:)=C; 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+if 
+\shape default
+\color inherit
+Aug(p,p)==0
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color magenta
+'A es singular.
+ No hay solución única'
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+break 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endif
+\shape default
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%etapa de eliminación para columna p
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+for
+\shape default
+\color inherit
+ k=p+1:N 
+\end_layout
+
+\begin_layout Standard
+\align left
+m=Aug(k,p)/Aug(p,p);
+\end_layout
+
+\begin_layout Standard
+\align left
+Aug(k,p:N+1)=Aug(k,p:N+1)-m*Aug(p,p:N+1); 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endfor 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endfor
+\shape default
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%sustituación hacia atrás en [U|Y]
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+X=sustRegre(Aug(1:N,1:N),Aug(1:N,N+1)); 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endfunction
+\end_layout
+
+\begin_layout Itemize
+\align left
+
+\series bold
+\shape italic
+\color black
+Captura del programa en ejecución
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Users/CARO/Pictures/cap2.jpg
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+El método que se utilizo para resolver el problema es el método de triangulación
+ superior seguda de sustitucion regresiva.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\shape italic
+\size large
+\color black
+3.
+ Ejercicio de circuitos eléctricos
+\end_layout
+
+\begin_layout Standard
+\align left
+En un circuito 
+\begin_inset Quotes eld
+\end_inset
+
+puente de Wheatstone
+\begin_inset Quotes erd
+\end_inset
+
+, las leyes de Kirchoff establecen que en cada lazo del circuito la suma
+ de las caídas de tensión deben igualar a la suma de las fuentes de tensión.
+ Para una configuración dada se obtiene el siguiente conjunto de ecuaciones.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $(50+R)·i_{1}−R·i_{2}−30·i_{3}=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $−R·i_{1}+(65+R)·i_{2}−15·i_{3}=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $−30·i_{1}−15·i_{2}+45·i_{3}=120$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\align left
+
+\series bold
+\shape italic
+\color black
+Código de Octave
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\series bold
+\shape italic
+\color blue
+function
+\series default
+\shape default
+\color inherit
+ [i]=corrientesElec(R) 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% La funcion me da como resultado los valores de las 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% corrientes electricas.
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% - R es la resistencia.
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% Se resuelve el sistema mediante el metodo iterativo de Jacobi.
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Entrada
+\end_layout
+
+\begin_layout Standard
+\align left
+R=input("Ingrese el valos de R:");
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Proceso
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+if
+\shape default
+\color inherit
+ R>0
+\end_layout
+
+\begin_layout Standard
+\align left
+A=[(50+R),-R,-30;-R,(65+R),-15;-30,-15,45]; 
+\end_layout
+
+\begin_layout Standard
+\align left
+b=[0;0;120]; 
+\end_layout
+
+\begin_layout Standard
+\align left
+x0=[0;0;0];
+\end_layout
+
+\begin_layout Standard
+\align left
+tol=1E-3;
+\end_layout
+
+\begin_layout Standard
+\align left
+i=jacobi(A,b,x0,tol); (*)
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Salida
+\end_layout
+
+\begin_layout Standard
+\align left
+disp("Los valores de las corrientes electricas son:");
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+else
+\end_layout
+
+\begin_layout Standard
+\align left
+disp("El valor de R no es mayor a cero") 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endif
+\shape default
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endfunction
+\end_layout
+
+\begin_layout Standard
+\align left
+(*) Programa utilizado para resolver el problema anterior.
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+function
+\shape default
+\color inherit
+ [x]=jacobi(A,b,x0,tol)
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% El siguiente programa resuelve el SEL por el método iterativo de Jacobi.
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Entrada
+\end_layout
+
+\begin_layout Standard
+\align left
+[N,N]=size(A); 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+for
+\shape default
+\color inherit
+ i=1:N;
+\end_layout
+
+\begin_layout Standard
+\align left
+D(i,i)=A(i,i);
+\end_layout
+
+\begin_layout Standard
+\align left
+Dinv(i,i)=1/A(i,i);
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endfor
+\shape default
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+R=A-D; 
+\end_layout
+
+\begin_layout Standard
+\align left
+c=Dinv*b; 
+\end_layout
+
+\begin_layout Standard
+\align left
+T=-Dinv*R;
+\end_layout
+
+\begin_layout Standard
+\align left
+errort=999;
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+while
+\shape default
+\color inherit
+ errort>tol
+\end_layout
+
+\begin_layout Standard
+\align left
+x=c+T*x0;
+\end_layout
+
+\begin_layout Standard
+\align left
+errort=norm((x-x0),1); 
+\end_layout
+
+\begin_layout Standard
+\align left
+x0=x;
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endwhile
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endfunction
+\end_layout
+
+\begin_layout Itemize
+\align left
+
+\series bold
+\shape italic
+\color black
+Captura del programa en ejecución
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Users/CARO/Pictures/cap3.jpg
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+El método que se ultilizo para resolver el problema es el método iterativo
+ de Jacobi.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\shape italic
+\size large
+\color black
+4.
+ Ejercicio de mecánica de fluidos
+\end_layout
+
+\begin_layout Standard
+Para un conjunto de tanques interconectados, donde se bombea una solución
+ de agua y un químico determinado, el principio de conservación de la masa
+ establece que, para cada tanque la suma de los caudales másicos de entrada
+ debe ser igual a la suma de los caudales másicos de salida, es decir, 
+\begin_inset Formula $\sum\dot{m}_{i}^{e}=\sum\dot{m}_{i}^{s},\;\dot{m_{i}=q_{i}.c_{i}}$
+\end_inset
+
+ Donde 
+\begin_inset Formula $q_{i}$
+\end_inset
+
+ es el caudal volumétrico y 
+\begin_inset Formula $c_{i}$
+\end_inset
+
+ es la concentración del químico.
+ Si se expresa el principio para cada tanque se obtiene el siguiente conjunto
+ de ecuaciones.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $4·20+4·c_{2}=8·c_{1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $8·c_{1}+2·c_{3}=(4+6)·c_{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $6·c_{2}+5·c_{4}=(2+3+6)·c_{3}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $3·c_{3}+4·c_{5}=(2+5)c_{4}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $2·15+2·c_{4}=4·c_{5}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\align left
+
+\series bold
+\shape italic
+\color black
+Código de Octave
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+function
+\shape default
+\color inherit
+ [c]=mecanicaFluid() 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% La funcion me da como resultado los valores de las 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% contracciones en cada tanque.
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% Se resuelve el sistema mediante triangulacion superior seguida 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% de una sustitucion regresiva.
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%%Entrada
+\end_layout
+
+\begin_layout Standard
+A=[8,-4,0,0,0;8,-10,2,0,0;0,6,-11,5,0;0,0,3,-7,4;0,0,0,-2,4]; 
+\end_layout
+
+\begin_layout Standard
+B=[80;0;0;0;30]; 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%%Proceso
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%%Resolvemos Ac=B mediante triangulacion superior seguida de sustitucion
+ regresiva.
+\end_layout
+
+\begin_layout Standard
+c=tSSR(A,B); (*)
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%%Salida
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+disp("Los valores de las contracciones en cada tanque son:");
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+endfunction
+\end_layout
+
+\begin_layout Standard
+\align left
+(*) Programa utilizado para resolver el problema anterior.
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+function
+\shape default
+\color inherit
+ [X]=tSSR(A,B) 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Ingreso - A matriz N x N no singular 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%% - B es una matriz N x 1 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%salida - X es matriz N x 1 con la solución de AX=B.
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Iniciaalizar X y la matriz temporario de almacenaje C
+\end_layout
+
+\begin_layout Standard
+\align left
+[N N]=size(A); 
+\end_layout
+
+\begin_layout Standard
+\align left
+X=zeros(N,1); 
+\end_layout
+
+\begin_layout Standard
+\align left
+C=zeros(1,N+1); 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Forma la matriz aumentada: Aug=[A|B] 
+\end_layout
+
+\begin_layout Standard
+\align left
+Aug=[A B]; 
+\end_layout
+
+\begin_layout Standard
+\align left
+for p=1:N-1 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Pivoteo parcial para columna p
+\end_layout
+
+\begin_layout Standard
+\align left
+[Y,j]=max(abs(Aug(p:N,p))); 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%Intercambio fila p y j 
+\end_layout
+
+\begin_layout Standard
+\align left
+C=Aug(p,:);
+\end_layout
+
+\begin_layout Standard
+\align left
+Aug(p,:)=Aug(j+p-1,:);
+\end_layout
+
+\begin_layout Standard
+\align left
+Aug(j+p-1,:)=C; 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+if 
+\shape default
+\color inherit
+Aug(p,p)==0
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color magenta
+'A es singular.
+ No hay solución única'
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+break 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endif
+\shape default
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%etapa de eliminación para columna p
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+for
+\shape default
+\color inherit
+ k=p+1:N 
+\end_layout
+
+\begin_layout Standard
+\align left
+m=Aug(k,p)/Aug(p,p);
+\end_layout
+
+\begin_layout Standard
+\align left
+Aug(k,p:N+1)=Aug(k,p:N+1)-m*Aug(p,p:N+1); 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endfor 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endfor
+\shape default
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\color green
+%%sustituación hacia atrás en [U|Y]
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+\align left
+X=sustRegre(Aug(1:N,1:N),Aug(1:N,N+1)); 
+\end_layout
+
+\begin_layout Standard
+\align left
+
+\shape italic
+\color blue
+endfunction
+\end_layout
+
+\begin_layout Itemize
+\align left
+
+\series bold
+\shape italic
+\color black
+Captura del programa en ejecución
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename C:/Users/CARO/Pictures/cap4.jpg
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+El método que se utilizo para resolver el problema es el método de triangulación
+ superior seguda de sustitucion regresiva.
+\end_layout
+
+\end_body
+\end_document

@@ -1,0 +1,724 @@
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+
+\family sans
+\series bold
+\shape italic
+\size large
+TAREA problema aplicado autovalores
+\end_layout
+
+\begin_layout Standard
+Descripción del problema:
+\end_layout
+
+\begin_layout Standard
+La carga de compresión de colapso por pandeo de una columna se puede determinar
+ resolviendo el siguiente problema de autovalores para los desplazamientos
+ transversales 
+\begin_inset Formula $(u_{1},u_{2},...,u_{5})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename cap1.jpg
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Desarrolle un algoritmo que aproxime el valor de la mínima carga P que logra
+ el colapso, considerando E=10E9[Pa], I=1.25E-5[m4], L=3[m].
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\shape slanted
+\size large
+\color black
+1.
+ Creación de la matriz A
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\shape slanted
+\size large
+\color black
+Código de Octave
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+function 
+\shape default
+\color inherit
+[A]=matrizA()
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% A es una matriz NxN
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% Donde la diagonal esta formada por -2 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% y 1 en las columnas (i,i+1) y en las fijas (i+1,i).
+\end_layout
+
+\begin_layout Standard
+A=-2*eye(5); 
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+for
+\shape default
+\color inherit
+ i=1:4
+\end_layout
+
+\begin_layout Standard
+A(i,1+i)=A(1+i,i)=1;
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+endfor
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+endfunction
+\size large
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\shape slanted
+\size large
+\color black
+Captura
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename cap2.jpg
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+2.
+ Cálculo de la norma de un vector
+\end_layout
+
+\begin_layout Itemize
+Código de Octave
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+function
+\shape default
+\color inherit
+ [norma1]=norm1(x) 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% calculo de la norma 1 de un vector.
+\end_layout
+
+\begin_layout Standard
+sum1=abs(x(1)); 
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+for 
+\shape default
+\color inherit
+i=2:length(x) 
+\end_layout
+
+\begin_layout Standard
+sum1=sum1+abs(x(i)); 
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+endfor
+\shape default
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+norma1=sum1; 
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+endfunction
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\shape slanted
+\size large
+\color black
+3.
+ Solucion del SEL
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\shape slanted
+\size large
+\color black
+Código de Octave
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+function
+\shape default
+\color inherit
+ [X]=tSSR(A,B) 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% A matriz N x N no singular 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% B es una matriz N x 1 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% X es matriz N x 1 con la solución de AX=B.
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% C es una matriz de almacenaje temporal.
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% Entrada
+\end_layout
+
+\begin_layout Standard
+[N N]=size(A); X=zeros(N,1); C=zeros(1,N+1);
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% Crea la matriz aumentada: Aug=[A|B]
+\end_layout
+
+\begin_layout Standard
+Aug=[A B];
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+for
+\shape default
+\color inherit
+ p=1:N-1 %%Pivoteo parcial para columna p
+\end_layout
+
+\begin_layout Standard
+[Y,j]=max(abs(Aug(p:N,p)));
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%%Intercambio fila p y j
+\end_layout
+
+\begin_layout Standard
+C=Aug(p,:); Aug(p,:)=Aug(j+p-1,:); Aug(j+p-1,:)=C;
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+if
+\shape default
+\color inherit
+ Aug(p,p)==0
+\end_layout
+
+\begin_layout Standard
+
+\color green
+'A es singular.
+ No hay solución única'
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+break
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+endif 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%%etapa de eliminación para columna p
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+for
+\shape default
+\color inherit
+ k=p+1:N
+\end_layout
+
+\begin_layout Standard
+m=Aug(k,p)/Aug(p,p);
+\end_layout
+
+\begin_layout Standard
+Aug(k,p:N+1)=Aug(k,p:N+1)-m*Aug(p,p:N+1); 
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+endfor 
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+endfor 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%%Salida
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%%sustituación hacia atrás en [U|Y]
+\end_layout
+
+\begin_layout Standard
+X=sustRegre(Aug(1:N,1:N),Aug(1:N,N+1));
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+endfunction
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\shape slanted
+\size large
+\color black
+4.
+ Método de la potencia inversa
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\shape slanted
+\size large
+\color black
+Código de Octave
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+function
+\shape default
+\color inherit
+ [alfa]=metPotenciaInv(A,x0,tol) 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% Funcion que encuentra los autovalores de un sistema
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% mediante el metodo de la potencia inversa utilizando 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% la funcion de triangulacion superior seguida de
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%%sustitucion regresiva ocupada en SEL.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% Entrada
+\end_layout
+
+\begin_layout Standard
+alfa=0; 
+\end_layout
+
+\begin_layout Standard
+erro=1; 
+\end_layout
+
+\begin_layout Standard
+x0n=x0/norm1(x0,1); 
+\end_layout
+
+\begin_layout Standard
+x1=tSSR(A,x0n);
+\end_layout
+
+\begin_layout Standard
+alfa=x1./x0n; 
+\end_layout
+
+\begin_layout Standard
+erro=max(abs(alfa))-min(abs(alfa)); 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% Encontramos el valor adecuado del autovalor asociado 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% asociado al sistema.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+while
+\shape default
+\color inherit
+ erro>tol 
+\end_layout
+
+\begin_layout Standard
+x0=x1; 
+\end_layout
+
+\begin_layout Standard
+x0n=x0/norm1(x0,1);
+\end_layout
+
+\begin_layout Standard
+x1=tSSR(A,x0n);
+\end_layout
+
+\begin_layout Standard
+alfa=x1./x0n;
+\end_layout
+
+\begin_layout Standard
+erro=max(abs(alfa))-min(abs(alfa)); 
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+endwhile
+\shape default
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% Salida 
+\end_layout
+
+\begin_layout Standard
+alfa=1/(alfa(1));
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+endfunction
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\shape slanted
+\size large
+\color black
+Captura
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename cap5.jpg
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\shape slanted
+\size large
+\color black
+5.
+ Solucion del problema para la carga mínima
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\shape slanted
+\size large
+\color black
+Código de Octave
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+function 
+\shape default
+\color inherit
+[P]=minCargaP() 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% Esta funcion encuentra el valor minimo de carga P que logra el colapso.
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% Se resuelve utilizando el metodo de la potencia inversa.
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% Donde se considera un vector inicial y una tolerancia como datos.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%%Entrada 
+\end_layout
+
+\begin_layout Standard
+A=matrizA; 
+\end_layout
+
+\begin_layout Standard
+x0=ones(5,1);
+\end_layout
+
+\begin_layout Standard
+tol=1E-10; 
+\end_layout
+
+\begin_layout Standard
+[alfa]=metPotenciaInv(A,x0,tol); 
+\end_layout
+
+\begin_layout Standard
+lanmda=alfa; 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%% Salida
+\end_layout
+
+\begin_layout Standard
+disp("El valor minimo de carga es:") 
+\end_layout
+
+\begin_layout Standard
+P=lanmda/(-2E-6); 
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+endfunction
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\shape slanted
+\size large
+\color black
+Captura
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename cap6.jpg
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+Carolina Camargo.
+\end_layout
+
+\end_body
+\end_document

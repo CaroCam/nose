@@ -1,0 +1,462 @@
+#LyX 1.6.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Tarea sobre interpolación 
+\end_layout
+
+\begin_layout Author
+Grupo 2 
+\end_layout
+
+\begin_layout Author
+Integrantes: Alessi, Mateo; Teo, Lian Choon; Camargo, Carolina.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\shape italic
+\size large
+\bar under
+\color black
+Introducción
+\end_layout
+
+\begin_layout Standard
+El archivo 
+\begin_inset Quotes eld
+\end_inset
+
+puntos.csv
+\begin_inset Quotes erd
+\end_inset
+
+ contiene las coordenadas cartesianas (X,Y) correspondientes a una nube
+ de puntos, cada fila es un punto distinto.
+ El archivo 
+\begin_inset Quotes eld
+\end_inset
+
+curvas.csv
+\begin_inset Quotes erd
+\end_inset
+
+ indica como se conectan los puntos, cada fila corresponde a una curva distinta
+ y los números se corresponden con las filas de 
+\begin_inset Quotes eld
+\end_inset
+
+puntos
+\begin_inset Quotes erd
+\end_inset
+
+.
+ El archivo 
+\begin_inset Quotes eld
+\end_inset
+
+curvas
+\begin_inset Quotes erd
+\end_inset
+
+ tiene en algunos lugares valores 0, esto indica que no hay más puntos en
+ la curva y se necesita para que se pueda cargar como una matriz rectangular.
+ Se utilizan funciones ya programadas en Octave, como por ejemplo polyfit,
+ polyval, polyout y para cargar los datos se utiliza la función csvread().
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\shape italic
+\size large
+\bar under
+\color black
+Actividad
+\end_layout
+
+\begin_layout Standard
+Escribir un código que realice las siguientes tareas
+\end_layout
+
+\begin_layout Enumerate
+lea los archivos 
+\begin_inset Quotes eld
+\end_inset
+
+puntos.csv
+\begin_inset Quotes erd
+\end_inset
+
+ y 
+\begin_inset Quotes eld
+\end_inset
+
+curvas.csv
+\begin_inset Quotes erd
+\end_inset
+
+ y arme dos matrices: Puntos y Curvas.
+\end_layout
+
+\begin_layout Enumerate
+para cada fila de 
+\begin_inset Quotes eld
+\end_inset
+
+Curva
+\begin_inset Quotes erd
+\end_inset
+
+ determine el polinomio interpolante a partir de las coordenadas de los
+ puntos asociados.
+\end_layout
+
+\begin_layout Enumerate
+generar una gráfica en el plano X-Y con todas las curvas, utilizando líneas
+ de color rojo y 15 puntos por cada curva.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\shape italic
+\size large
+\bar under
+\color black
+Código de Octave
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+function
+\shape default
+\color inherit
+ [Polinter]=tareainterpol() 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+% [Polinter]=Tareainterpol() es un programa que realiza una gráfica a traves
+ de polinomios interpoladores a partir de los datos proporcionados por dos
+ archivos .csv 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+% Lectura de los archivos y generación de las matrices
+\end_layout
+
+\begin_layout Standard
+PUNTOS=csvread('puntos.csv'); 
+\end_layout
+
+\begin_layout Standard
+CURVAS=csvread('curvas.csv'); 
+\end_layout
+
+\begin_layout Standard
+N=rows(CURVAS); 
+\end_layout
+
+\begin_layout Standard
+M=columns(CURVAS);
+\end_layout
+
+\begin_layout Standard
+
+\color green
+% Gráfica de la nube de puntos dada
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+figure (); plot (PUNTOS(:,1),PUNTOS(:,2),'or'); title ('NUBE')
+\end_layout
+
+\begin_layout Standard
+hold on 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+% Relación entre las filas de CURVAS y los elementos de PUNTOS
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+for
+\shape default
+\color inherit
+ i=1:N
+\end_layout
+
+\begin_layout Standard
+k=0;
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+for
+\shape default
+\color inherit
+ j=1:M 
+\end_layout
+
+\begin_layout Standard
+k=k+1; 
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+if
+\shape default
+\color inherit
+ CURVAS(i,j)!=0
+\end_layout
+
+\begin_layout Standard
+
+\color green
+% Cálculo de los polinomios interpolantes
+\end_layout
+
+\begin_layout Standard
+X(k)=PUNTOS(CURVAS(i,j),1); 
+\end_layout
+
+\begin_layout Standard
+Y(k)=PUNTOS(CURVAS(i,j),2); 
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+endif 
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+endfor
+\shape default
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+% Cálculo de los coeficientes de los polinomios
+\end_layout
+
+\begin_layout Standard
+Polinter=polyfit(X,Y,length(X)-1); 
+\end_layout
+
+\begin_layout Standard
+Poliout=polyout(Polinter);
+\end_layout
+
+\begin_layout Standard
+
+\color green
+% Preparación de la gráfica de los polinomios
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+Polipuntointermedio=linspace(X(1),X(end),15);
+\end_layout
+
+\begin_layout Standard
+Polival=polyval(Polinter,Polipuntointermedio); 
+\end_layout
+
+\begin_layout Standard
+
+\color green
+%Gráfica de los polinomios
+\end_layout
+
+\begin_layout Standard
+plot (Polipuntointermedio,Polival,'-r') 
+\end_layout
+
+\begin_layout Standard
+clear X 
+\end_layout
+
+\begin_layout Standard
+clear Y 
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+endfor
+\shape default
+\color inherit
+ 
+\end_layout
+
+\begin_layout Standard
+hold off
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+\color blue
+endfunction
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\shape italic
+\size large
+\bar under
+\color black
+Primeros resultados
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename primer resultado.jpg
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+\shape italic
+\size large
+\bar under
+\color black
+Resultados finales
+\end_layout
+
+\begin_layout Standard
+Al ver que en la figura solo faltan dos rectas que unen los puntos, modificamos
+ el archivo madre 
+\begin_inset Quotes eld
+\end_inset
+
+curvas.csv
+\begin_inset Quotes erd
+\end_inset
+
+ para poder unir los puntos.
+\end_layout
+
+\begin_layout Standard
+La modificación consistió en lo siguiente: vimos que los polinomios que
+ no unían esos puntos son las curvas que están en la fila 13, que completa
+ la letra 
+\begin_inset Quotes eld
+\end_inset
+
+C
+\begin_inset Quotes erd
+\end_inset
+
+ y la 19 que completa la letra 
+\begin_inset Quotes eld
+\end_inset
+
+E
+\begin_inset Quotes erd
+\end_inset
+
+; una vez ubicadas da las curvas (13: 17,18,19,48) y (19: 27,28,29,49) intercamb
+iamos las posiciones última y penúltima de cada fila.
+ Quedando lo siguiente:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename modificacion.jpg
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Una vez modificado el archivo se obtuvo el siguiente resultado:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename resultado final.jpg
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
